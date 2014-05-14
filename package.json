@@ -9,6 +9,10 @@
     "cheerio": "~0.13.1",
     "request": "~2.33.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/thibauts/node-google-search-scraper.git"
+  },
   "keywords": [
     "google", 
     "search", 
