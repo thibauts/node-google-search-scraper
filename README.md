@@ -87,7 +87,8 @@ You can easily plug your own solver, implementing a solve method with the follow
 var customSolver = {
   solve: function(imageData, callback) {
     // Do something with image data, like displaying it to the user
-    var id = null; // id is used by BDC to allow reporting solving errors, and can be safely ignored here
+    // id is used by BDC to allow reporting solving errors, and can be safely ignored here
+    var id = null; 
     callback(err, id, solutionText);
   }
 };
