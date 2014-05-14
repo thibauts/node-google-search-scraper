@@ -2,7 +2,7 @@ google-search-scraper
 =============
 ### Google search scraper with captcha solving support
 
-This module allows google search results extraction in a simple yet flexible way, and handles captcha solving transparently (through external services or your hand-made solver).
+This module allows google search results extraction in a simple yet flexible way, and handles captcha solving transparently (through external services or your own hand-made solver).
 
 Out of the box you can target a specific google search host, specify a language and limit search results returned. Extending these defaults with custom URL params is supported through options.
 
@@ -46,7 +46,7 @@ var options = {
   query: 'grenouille',
   host: 'www.google.fr',
   lang: 'fr',
-  age: 'd1' // last 24 hours ([dhwm]\d? as in google URL)
+  age: 'd1' // last 24 hours ([hdwmy]\d? as in google URL)
   limit: 10
   params: {} // params will be copied as-is in the search URL query string
 };
@@ -87,6 +87,7 @@ You can easily plug your own solver, implementing a solve method with the follow
 var customSolver = {
   solve: function(imageData, callback) {
     // Do something with image data, like displaying it to the user
+    var id = null; // id is used by BDC to allow reporting solving errors, and can be safely ignored here
     callback(err, id, solutionText);
   }
 };
