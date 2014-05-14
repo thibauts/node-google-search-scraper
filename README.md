@@ -34,7 +34,7 @@ scraper.search(options, function(err, url) {
   // This is called for each result
   if(err) throw err;
   console.log(url)
-});;
+});
 ``` 
 
 Various options combined
@@ -46,8 +46,8 @@ var options = {
   query: 'grenouille',
   host: 'www.google.fr',
   lang: 'fr',
-  age: 'd1' // last 24 hours ([hdwmy]\d? as in google URL)
-  limit: 10
+  age: 'd1', // last 24 hours ([hdwmy]\d? as in google URL)
+  limit: 10,
   params: {} // params will be copied as-is in the search URL query string
 };
 
@@ -55,9 +55,8 @@ scraper.search(options, function(err, url) {
   // This is called for each result
   if(err) throw err;
   console.log(url)
-});;
+});
 ```
-
 
 Extract all results on edu sites for "information theory" and solve captchas along the way
 
@@ -69,7 +68,7 @@ var dbc = new DeathByCaptcha('username', 'password');
 
 var options = {
   query: 'site:edu "information theory"',
-  age: 'y' // less than a year,
+  age: 'y', // less than a year,
   solver: dbc
 };
 
@@ -77,9 +76,8 @@ scraper.search(options, function(err, url) {
   // This is called for each result
   if(err) throw err;
   console.log(url)
-});;
+});
 ```
-
 
 You can easily plug your own solver, implementing a solve method with the following signature:
 
@@ -87,7 +85,7 @@ You can easily plug your own solver, implementing a solve method with the follow
 var customSolver = {
   solve: function(imageData, callback) {
     // Do something with image data, like displaying it to the user
-    // id is used by BDC to allow reporting solving errors, and can be safely ignored here
+    // id is used by BDC to allow reporting solving errors and can be safely ignored here
     var id = null; 
     callback(err, id, solutionText);
   }
