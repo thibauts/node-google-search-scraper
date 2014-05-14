@@ -1,0 +1,19 @@
+{
+  "name": "google-search-scraper",
+  "version": "0.0.1",
+  "description": "Google search scraper with captcha solving support",
+  "author": "thibauts",
+  "license": "MIT",
+  "main": "index.js",
+  "dependencies": {
+    "cheerio": "~0.13.1",
+    "request": "~2.33.0"
+  },
+  "keywords": [
+    "google", 
+    "search", 
+    "scraper", 
+    "decaptcher", 
+    "captcha"
+  ]
+}
