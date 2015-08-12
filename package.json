@@ -1,6 +1,6 @@
 {
   "name": "google-search-scraper",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Google search scraper with captcha solving support",
   "author": "thibauts",
   "license": "MIT",

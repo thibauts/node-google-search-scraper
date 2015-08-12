@@ -59,15 +59,28 @@ function search(options, callback) {
         followRedirect: false
       }, 
       function(err, res) {
-
         if(err) return callback(err);
 
         if(res.statusCode === 302) {
-          var err = new Error('Captcha');
-          err.code = 'ECAPTCHA';
-          err.location = res.headers.location;
-          this.abort();
-          return callback(err);
+          var parsed = url.parse(res.headers.location, true);
+
+          if(parsed.pathname !== '/search') {
+            var err = new Error('Captcha');
+            err.code = 'ECAPTCHA';
+            err.location = res.headers.location;
+            this.abort();
+            return callback(err);
+          } else {
+            session.get({
+              uri: res.headers.location,
+              qs: params,
+              followRedirect: false
+            }, function(err, res) {
+              if(err) return callback(err);
+              callback(null, res.body);
+            });
+            return;
+          }
         }
 
         callback(null, res.body);
