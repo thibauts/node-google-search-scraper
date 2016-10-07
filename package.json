@@ -1,6 +1,6 @@
 {
   "name": "google-search-scraper",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Google search scraper with captcha solving support",
   "author": "thibauts",
   "license": "MIT",
@@ -14,10 +14,10 @@
     "url": "git://github.com/thibauts/node-google-search-scraper.git"
   },
   "keywords": [
-    "google", 
-    "search", 
-    "scraper", 
-    "decaptcher", 
+    "google",
+    "search",
+    "scraper",
+    "decaptcher",
     "captcha"
   ]
 }
