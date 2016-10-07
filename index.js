@@ -15,7 +15,7 @@ function search(options, callback) {
   if(options.age) params.tbs = 'qdr:' + options.age;
   if(options.query) params.q = options.query;
 
-  params.start = 0;
+  params.start = params.start || 0;
 
   getPage(params, function onPage(err, body) {
     if(err) {
