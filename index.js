@@ -8,6 +8,7 @@ function search(options, callback) {
   var host = options.host || 'www.google.com';
   var solver = options.solver;
   var params = options.params || {};
+  var fullResult = options.fullResult || false;
   var results = [];
 
   params.hl = params.hl || options.lang || 'en';
@@ -35,9 +36,11 @@ function search(options, callback) {
       return results.indexOf(result) === -1;
     });
 
-    newResults.forEach(function(result) {
-      callback(null, result);
-    });
+    if (!fullResult) {    
+      newResults.forEach(function(result) {
+        callback(null, result);
+      });
+    }
 
     if(newResults.length === 0) {
       return;
@@ -49,6 +52,9 @@ function search(options, callback) {
       params.start = results.length;
       getPage(params, onPage);
     }
+
+    if (fullResult)
+      callback(null, results);
   });
 
 
