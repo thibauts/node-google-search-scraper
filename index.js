@@ -96,14 +96,13 @@ function search(options, callback) {
       var item = {};
 
       var elemUrl = $(this).find("h3 a");
-      var parsedUrl = url.parse(elemUrl[0].attribs.href, true);
       var elemMeta = $(this).find(".slp");
       var elemDesc = $(this).find(".st");
-
+      var parsedUrl = url.parse(elemUrl.attr("href"), true);
       if (parsedUrl.pathname === '/url') {
         item['url'] = parsedUrl.query.q;
       }
-      item['title'] = elemUrl[0].children[0].data;
+      item['title'] = elemUrl.text();
       item['meta'] = elemMeta.text();
       item['desc'] = elemDesc.text();
 
