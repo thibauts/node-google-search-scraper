@@ -36,7 +36,7 @@ function search(options, callback) {
     });
 
     newResults.forEach(function(result) {
-      callback(null, result);
+      callback(null, result['url'], result);
     });
 
     if(newResults.length === 0) {
@@ -92,12 +92,23 @@ function search(options, callback) {
     var results = [];
     var $ = cheerio.load(body);
 
-    $('.g h3 a').each(function(i, elem) {
-      var parsed = url.parse(elem.attribs.href, true);
-      if (parsed.pathname === '/url') {
-        results.push(parsed.query.q);
+    $('.g').each(function(i, elem) {
+      var item = {};
+
+      var elemUrl = $(this).find("h3 a");
+      var parsedUrl = url.parse(elemUrl[0].attribs.href, true);
+      var elemMeta = $(this).find(".slp");
+      var elemDesc = $(this).find(".st");
+
+      if (parsedUrl.pathname === '/url') {
+        item['url'] = parsedUrl.query.q;
       }
-    });
+      item['title'] = elemUrl[0].children[0].data;
+      item['meta'] = elemMeta.text();
+      item['desc'] = elemDesc.text();
+
+      results.push(item);
+    });    
 
     return results;
   }
