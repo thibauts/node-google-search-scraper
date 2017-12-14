@@ -92,7 +92,7 @@ function search(options, callback) {
     var results = [];
     var $ = cheerio.load(body);
 
-    $('.g').each(function(i, elem) {
+    $('#search .g').each(function(i, elem) {
       var item = {};
 
       var elemUrl = $(this).find("h3 a");
