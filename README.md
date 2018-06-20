@@ -30,10 +30,13 @@ var options = {
   limit: 10
 };
 
-scraper.search(options, function(err, url) {
+scraper.search(options, function(err, url, meta) {
   // This is called for each result
   if(err) throw err;
-  console.log(url)
+  console.log(url);
+  console.log(meta.title);
+  console.log(meta.meta);
+  console.log(meta.desc)
 });
 ``` 
 
