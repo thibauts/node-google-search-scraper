@@ -1,17 +1,20 @@
 {
-  "name": "google-search-scraper",
-  "version": "0.1.0",
-  "description": "Google search scraper with captcha solving support",
-  "author": "thibauts",
+  "name": "samuelfaj-google-scraper",
+  "version": "0.1.1",
+  "description": "An fork of Google search scraper with captcha solving support with promises",
+  "author": "Samuel Fajreldines",
   "license": "MIT",
   "main": "index.js",
   "dependencies": {
     "cheerio": "~0.13.1",
     "request": "~2.33.0"
   },
+  "scripts": {
+    "test": "node test.js"
+  },
   "repository": {
     "type": "git",
-    "url": "git://github.com/thibauts/node-google-search-scraper.git"
+    "url": "git://github.com/samuelfaj/node-google-search-scraper"
   },
   "keywords": [
     "google",

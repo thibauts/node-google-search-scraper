@@ -3,7 +3,6 @@ var cheerio = require('cheerio');
 var url     = require('url');
 
 function search(options, callback) {
-
   var session = request.defaults({ jar : true });
   var host = options.host || 'www.google.com';
   var solver = options.solver;
@@ -17,77 +16,41 @@ function search(options, callback) {
 
   params.start = params.start || 0;
 
-  getPage(params, function onPage(err, body) {
-    if(err) {
-      if(err.code !== 'ECAPTCHA' || !solver) return callback(err);
-
-      solveCaptcha(err.location, function(err, page) {
-        if(err) return callback(err);
-        onPage(null, page);
-      });
-
-      return;
-    }
-
-    var currentResults = extractResults(body);
-
-    var newResults = currentResults.filter(function(result) {
-      return results.indexOf(result) === -1;
-    });
-
-    newResults.forEach(function(result) {
-      callback(null, result['url'], result);
-    });
-
-    if(newResults.length === 0) {
-      return;
-    }
-
-    results = results.concat(newResults);
-
-    if(!options.limit || results.length < options.limit) {
-      params.start = results.length;
-      getPage(params, onPage);
-    }
-  });
-
-
   function getPage(params, callback) {
     session.get({
-        uri: 'https://' + host + '/search',
-        qs: params,
-        followRedirect: false
-      }, 
-      function(err, res) {
-        if(err) return callback(err);
+          uri: 'https://' + host + '/search',
+          qs: params,
+          followRedirect: false
+        },
+        function(err, res) {
+          if(err) return callback(err);
 
-        if(res.statusCode === 302) {
-          var parsed = url.parse(res.headers.location, true);
+          if(res.statusCode === 302) {
+            var parsed = url.parse(res.headers.location, true);
 
-          if(parsed.pathname !== '/search') {
-            var err = new Error('Captcha');
-            err.code = 'ECAPTCHA';
-            err.location = res.headers.location;
-            this.abort();
-            return callback(err);
-          } else {
-            session.get({
-              uri: res.headers.location,
-              qs: params,
-              followRedirect: false
-            }, function(err, res) {
-              if(err) return callback(err);
-              callback(null, res.body);
-            });
-            return;
+            if(parsed.pathname !== '/search') {
+              var err = new Error('Captcha');
+              err.code = 'ECAPTCHA';
+              err.location = res.headers.location;
+              this.abort();
+              return callback(err);
+            } else {
+              session.get({
+                uri: res.headers.location,
+                qs: params,
+                followRedirect: false
+              }, function(err, res) {
+                if(err) return callback(err);
+                callback(null, res.body);
+              });
+              return;
+            }
           }
-        }
 
-        callback(null, res.body);
-      }
+          callback(null, res.body);
+        }
     );
   }
-
   function extractResults(body) {
     var results = [];
     var $ = cheerio.load(body);
@@ -107,11 +70,10 @@ function search(options, callback) {
       item['desc'] = elemDesc.text();
 
       results.push(item);
-    });    
+    });
 
     return results;
   }
-
   function solveCaptcha(captchaUrl, callback) {
 
     var tmp = url.parse(captchaUrl);
@@ -140,17 +102,17 @@ function search(options, callback) {
 
           // Try solution
           session.get({
-              uri: baseUrl + '/sorry/' + formAction,
-              qs: {
-                id: captchaId,
-                captcha: solution,
-                continue: continueUrl
+                uri: baseUrl + '/sorry/' + formAction,
+                qs: {
+                  id: captchaId,
+                  captcha: solution,
+                  continue: continueUrl
+                }
+              },
+              function(err, res) {
+                if(res.statusCode !== 200) return callback(new Error('Captcha decoding failed'));
+                callback(null, res.body);
               }
-            }, 
-            function(err, res) {
-              if(res.statusCode !== 200) return callback(new Error('Captcha decoding failed'));
-              callback(null, res.body);
-            }
           );
 
         });
@@ -161,6 +123,46 @@ function search(options, callback) {
 
   }
 
+  const _results = [];
+
+  return new Promise(resolve => {
+    getPage(params, function onPage(err, body) {
+      if(err) {
+        if(err.code !== 'ECAPTCHA' || !solver) return callback(err);
+
+        solveCaptcha(err.location, function(err, page) {
+          if(err) return callback(err);
+          onPage(null, page);
+        });
+
+        return;
+      }
+
+      var currentResults = extractResults(body);
+
+      var newResults = currentResults.filter(function(result) {
+        return results.indexOf(result) === -1;
+      });
+
+      newResults.forEach(function(result) {
+        _results.push([null, result['url'], result]);
+        callback(null, result['url'], result);
+      });
+
+      if(newResults.length === 0) {
+        resolve(_results);
+      }
+
+      results = results.concat(newResults);
+
+      if(!options.limit || results.length < options.limit) {
+        params.start = results.length;
+        getPage(params, onPage);
+      }else{
+        resolve(_results);
+      }
+    });
+  });
 }
 
 module.exports.search = search;
