@@ -1,5 +1,27 @@
 google-search-scraper
 =============
+
+### SamuelFaj FORK
+Now it has promise support.
+``` javascript
+const scraper = require("samuelfaj-google-scraper");
+var options = {
+    query: 'nodejs',
+    limit: 10
+};
+
+scraper.search(options, function(err, url, meta) {
+    // This is called for each result
+    if(err) throw err;
+    console.log(url);
+    console.log(meta.title);
+    console.log(meta.meta);
+    console.log(meta.desc)
+}).then((results) => {
+    console.log("All searches ended", results);
+});
+```
+
 ### Google search scraper with captcha solving support
 
 This module allows google search results extraction in a simple yet flexible way, and handles captcha solving transparently (through external services or your own hand-made solver).
