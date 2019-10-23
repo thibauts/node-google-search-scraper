@@ -7,7 +7,7 @@
   "main": "index.js",
   "dependencies": {
     "cheerio": "~0.13.1",
-    "request": "~2.33.0"
+    "request": "~2.88.0"
   },
   "repository": {
     "type": "git",
